@@ -1,5 +1,4 @@
 .runtime/
-project/
 *.log
 build/
 artifacts/

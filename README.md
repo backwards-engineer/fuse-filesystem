@@ -19,6 +19,7 @@ In PowerShell 7, from this directory:
 
 ```powershell
 ./scripts/Start-Services.ps1
+./scripts/Get-Status.ps1
 # Edit source, then:
 git add src tests
 git commit -m "Describe the change"

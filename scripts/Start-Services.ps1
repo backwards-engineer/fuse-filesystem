@@ -4,6 +4,7 @@ $access = Get-Content "$runtime/access.json" -Raw | ConvertFrom-Json
 $gitBin = Join-Path (Split-Path (Split-Path (Get-Command git.exe).Source -Parent) -Parent) 'bin'
 $env:PATH = "$gitBin;$env:PATH"
 function Start-LocalService($Name, $Executable, $Arguments) {
+    $Executable = [IO.Path]::GetFullPath($Executable)
     $pidFile = "$runtime/$Name.pid"
     if (Test-Path $pidFile) {
         $existing = Get-Process -Id (Get-Content $pidFile) -ErrorAction SilentlyContinue
