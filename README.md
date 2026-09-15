@@ -62,6 +62,8 @@ cat "$HOME/mnt/local-fusefs/hello.txt"
 fusermount3 -u "$HOME/mnt/local-fusefs"
 ```
 
+Compiler output lives under `~/.cache/local-fusefs` on the native Linux filesystem. The script copies the executable, test report, and packages back into this workspace's ignored `build/` and `artifacts/` folders.
+
 Core tests cover path handling, bounded reads, negative and very large offsets, and EOF. Mount tests exercise directory listing, contents, seek, metadata, missing files, and write rejection. Missing `/dev/fuse` fails the build rather than skipping mount tests.
 
 ## Recreate the setup
