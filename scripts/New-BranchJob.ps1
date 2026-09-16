@@ -10,7 +10,9 @@ $headers = @{ Authorization = "Basic $pair" }
 $server = 'http://127.0.0.1:8080'
 $crumb = Invoke-RestMethod "$server/crumbIssuer/api/json" -Headers $headers -SessionVariable session
 $headers[$crumb.crumbRequestField] = $crumb.crumb
-[xml]$configuration = (Invoke-WebRequest "$server/job/local-fusefs/config.xml" -Headers $headers -WebSession $session).Content
+$xmlText = (Invoke-WebRequest "$server/job/local-fusefs/config.xml" -Headers $headers -WebSession $session).Content
+# Jenkins emits XML 1.1; this job uses XML 1.0-compatible content and .NET's parser requires 1.0.
+[xml]$configuration = $xmlText -replace '^<\?xml version="1\.1"', '<?xml version="1.0"'
 $branchNode = $configuration.SelectSingleNode('//scm/branches/hudson.plugins.git.BranchSpec/name')
 if (!$branchNode) { throw 'The source job does not contain a Git branch specification.' }
 $branchNode.InnerText = "*/$Branch"
