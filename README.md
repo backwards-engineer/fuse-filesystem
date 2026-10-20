@@ -4,6 +4,11 @@
 compressed, content-addressed storage. The feature branch is
 `codex/fusefs-storage-features`.
 
+This repository includes the filesystem source (`src/`), tests and benchmarks,
+the Jenkins pipeline (`Jenkinsfile`, `ci/`), and the scripts that configure local
+Gitea and Jenkins (`scripts/`). Generated service configurations, credentials,
+filesystem stores, downloaded tools, and compiled packages stay outside Git.
+
 ## Run in WSL2 Ubuntu 24.04
 
 From this Windows workspace, install the added libraries once:
@@ -15,7 +20,7 @@ From this Windows workspace, install the added libraries once:
 Then in Ubuntu:
 
 ```bash
-cd /mnt/c/Users/chris/Documents/ChatGPT/build-system
+cd /mnt/c/path/to/your/fuse-filesystem
 bash ci/build.sh
 mkdir -p "$HOME/mnt/local-fusefs"
 ./build/fusefs-admin init "$HOME/fusefs-store" --key-file "$HOME/fusefs.key" \
@@ -94,6 +99,26 @@ and reports errors without repairing data. Keep unmounted store backups and the
 key separately. Losing the key makes content unrecoverable.
 
 ## Tests and benchmarks
+
+### Verified Jenkins run
+
+On October 20, 2026, Jenkins build **#2** of `local-fusefs-storage-features`
+completed successfully against source commit
+`ac9b99d6643a5b8531329245c42599311981a370` in WSL2 Ubuntu 24.04:
+
+- **80 passed, 0 failed, 0 skipped:** 40 storage/mounted FUSE cases, repeated
+  under AddressSanitizer and UndefinedBehaviorSanitizer.
+- All four benchmark workloads and the package validation stage passed.
+- The screenshot below was captured directly from that build's Jenkins test
+  report. Subsequent publication changes only add documentation and ignore rules.
+
+![Jenkins build 2: all 80 tests passing](docs/images/jenkins-tests-passing.png)
+
+The [live report](http://127.0.0.1:8080/job/local-fusefs-storage-features/2/testReport/)
+is available on the machine hosting Jenkins after signing in. The screenshot
+above can be viewed without access to that local service.
+
+### Run the checks
 
 All tests require Linux, `/dev/fuse`, and a non-root test user. Missing FUSE is a
 failure, not a skipped test. Fixtures use private disposable Linux directories.
